@@ -546,11 +546,13 @@ async function handleRootClicks(event) {
     const action = cartQtyButton.dataset.action;
     const existing = state.user?.cart.find(item => item.id === id);
     if (existing) {
-      const quantity = action === 'increase' ? 1 : -1;
-      const response = await fetch(`/api/cart/${encodeURIComponent(state.user.email)}/remove`, {
+      const url = action === 'increase'
+        ? `/api/cart/${encodeURIComponent(state.user.email)}/add`
+        : `/api/cart/${encodeURIComponent(state.user.email)}/remove`;
+      const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id, quantity }),
+        body: JSON.stringify({ id, quantity: 1 }),
       });
       if (response.ok) {
         const result = await response.json();

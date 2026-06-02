@@ -183,7 +183,8 @@ app.post("/api/cart/:email/remove", (req, res) => {
   const data = loadData();
   const user = data.users.find(u => u.email === email || u.username === email);
   if (!user) return res.status(404).json({ error: "Usuário não encontrado." });
-  const qty = Number(quantity) || 0;
+  let qty = Number(quantity) || 0;
+  if (qty < 0) qty = Math.abs(qty);
   if (qty > 0) {
     const existing = user.cart.find(item => item.id === id);
     if (!existing) return res.status(404).json({ error: "Item não encontrado no carrinho." });
